@@ -56,7 +56,7 @@ def main():
             st.write(f"Source: [{city_page_url}]({city_page_url})")
 
             # Truncate city content to fit within GPT-3's token limit
-            max_tokens_for_prompt = 4097 - 2048  # Reserve tokens for completion
+            max_tokens_for_prompt = 4097 - 4096  # Reserve tokens for completion
             truncated_city_content = city_content[:max_tokens_for_prompt]
 
             city_page = generate_content(truncated_city_content)
