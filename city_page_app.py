@@ -51,12 +51,12 @@ def main():
 
     if st.button("Generate City Page"):
         try:
-            city_summary = wikipedia.summary(selected_city)
+            city_content = wikipedia.page(selected_city).content
             city_page_url = wikipedia.page(selected_city).url
             st.write(f"Source: [{city_page_url}]({city_page_url})")
 
-            city_page = generate_content(city_summary)
-            tokens_used = len(openai.api_key) + len(city_summary)
+            city_page = generate_content(city_content)
+            tokens_used = len(openai.api_key) + len(city_content)
             st.write(f"Number of tokens used to create the article: {tokens_used}")
 
             st.markdown(city_page)
@@ -65,4 +65,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
