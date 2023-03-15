@@ -2,4 +2,3 @@ streamlit
 wikipedia
 openai
 requests
-re
