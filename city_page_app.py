@@ -19,12 +19,15 @@ def get_cities():
     for row in soup.select("table.wikitable > tbody > tr"):
         population_cell = row.select_one("td:nth-child(4)")
         if population_cell:
-            population = int(re.sub("[^0-9]", "", population_cell.text))
-            if population > 25000:
-                city = row.select_one("td:nth-child(2)").text.strip()
-                cities.append(city)
+            population_str = re.sub("[^0-9]", "", population_cell.text)
+            if population_str:  # Check if the population string is not empty
+                population = int(population_str)
+                if population > 25000:
+                    city = row.select_one("td:nth-child(2)").text.strip()
+                    cities.append(city)
 
     return cities
+
 
 # Generate engaging and unique content using OpenAI GPT-3.5
 def generate_content(text):
