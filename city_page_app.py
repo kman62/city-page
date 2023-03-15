@@ -34,7 +34,7 @@ def generate_content(text):
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=f"Rewrite the following text in an engaging and unique way using active voice, including internal links and proper H1, H2, and H3 headers in markdown format. The text should appear as if written by a copywriter with 10 years of experience in SEO:\n\n{text}",
-        max_tokens=2048,
+        max_tokens=4096,
         n=1,
         stop=None,
         temperature=0.7,
@@ -55,8 +55,12 @@ def main():
             city_page_url = wikipedia.page(selected_city).url
             st.write(f"Source: [{city_page_url}]({city_page_url})")
 
-            city_page = generate_content(city_content)
-            tokens_used = len(openai.api_key) + len(city_content)
+            # Truncate city content to fit within GPT-3's token limit
+            max_tokens_for_prompt = 4097 - 2048  # Reserve tokens for completion
+            truncated_city_content = city_content[:max_tokens_for_prompt]
+
+            city_page = generate_content(truncated_city_content)
+            tokens_used = len(openai.api_key) + len(truncated_city_content)
             st.write(f"Number of tokens used to create the article: {tokens_used}")
 
             st.markdown(city_page)
@@ -65,5 +69,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
