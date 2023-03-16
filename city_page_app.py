@@ -68,7 +68,7 @@ def main():
 
     if st.button("Generate City Page"):
         try:
-            city_summary = wikipedia.summary(selected_city)
+            city_summary = wikipedia.page(selected_city).content
             city_page_url = wikipedia.page(selected_city).url
             st.write(f"Source: [{city_page_url}]({city_page_url})")
 
