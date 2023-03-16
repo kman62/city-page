@@ -5,6 +5,8 @@ import re
 import requests
 import nltk
 
+nltk.download('punkt')
+
 from bs4 import BeautifulSoup
 
 # Load API key
