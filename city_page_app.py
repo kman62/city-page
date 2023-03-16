@@ -84,4 +84,10 @@ def main():
             # Calculate the number of tokens used by OpenAI
             tokens_used = len(openai.api_key) + sum([len(chunk) for chunk in chunks])
 
-            st.write(f"Number of tokens used to create the article
+            st.write(f"Number of tokens used to create the article: {tokens_used}")
+st.markdown(city_page)
+except Exception as e:
+st.error(f"Error generating city page: {e}")
+
+if name == "main":
+main()
