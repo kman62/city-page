@@ -68,12 +68,12 @@ def main():
 
     if st.button("Generate City Page"):
         try:
-            city_page = wikipedia.page(selected_city)
+            city_summary = wikipedia.summary(selected_city)
             city_page_url = wikipedia.page(selected_city).url
             st.write(f"Source: [{city_page_url}]({city_page_url})")
 
             # Chunk the city summary into 1000-token chunks with an overlap of 50 tokens
-            chunks = chunk_text(city_page)
+            chunks = chunk_text(city_summary)
 
             # Generate content for each chunk using OpenAI
             city_page_chunks = [generate_content(chunk) for chunk in chunks]
@@ -84,11 +84,4 @@ def main():
             # Calculate the number of tokens used by OpenAI
             tokens_used = len(openai.api_key) + sum([len(chunk) for chunk in chunks])
 
-            st.write(f"Number of tokens used to create the article: {tokens_used}")
-            st.markdown(city_page)
-        except Exception as e:
-            st.error(f"Error generating city page: {e}")
-
-
-if __name__ == "__main__":
-    main()
+            st.write(f"Number of tokens used to create the article
