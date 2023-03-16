@@ -3,6 +3,7 @@ import wikipedia
 import openai
 import re
 import requests
+import nltk
 
 from bs4 import BeautifulSoup
 
@@ -26,7 +27,7 @@ def get_cities():
                     city = row.select_one("td:nth-child(2)").text.strip()
                     cities.append(city)
 
-    return cities
+    return sorted(cities)
 
 
 # Generate engaging and unique content using OpenAI GPT-3.5
@@ -42,6 +43,20 @@ def generate_content(text):
 
     return response.choices[0].text.strip()
 
+
+# Chunk text into 1000-token chunks with an overlap of 50 tokens
+def chunk_text(text):
+    tokens = nltk.word_tokenize(text)
+    chunk_size = 1000
+    overlap = 50
+
+    chunks = []
+    for i in range(0, len(tokens), chunk_size - overlap):
+        chunks.append(' '.join(tokens[i:i+chunk_size]))
+
+    return chunks
+
+
 # Main Streamlit application
 def main():
     st.title("City Page Creator")
@@ -55,13 +70,23 @@ def main():
             city_page_url = wikipedia.page(selected_city).url
             st.write(f"Source: [{city_page_url}]({city_page_url})")
 
-            city_page = generate_content(city_summary)
-            tokens_used = len(openai.api_key) + len(city_summary)
-            st.write(f"Number of tokens used to create the article: {tokens_used}")
+            # Chunk the city summary into 1000-token chunks with an overlap of 50 tokens
+            chunks = chunk_text(city_summary)
 
+            # Generate content for each chunk using OpenAI
+            city_page_chunks = [generate_content(chunk) for chunk in chunks]
+
+            # Concatenate the chunks into a single string
+            city_page = '\n\n'.join(city_page_chunks)
+
+            # Calculate the number of tokens used by OpenAI
+            tokens_used = len(openai.api_key) + sum([len(chunk) for chunk in chunks])
+
+            st.write(f"Number of tokens used to create the article: {tokens_used}")
             st.markdown(city_page)
         except Exception as e:
             st.error(f"Error generating city page: {e}")
+
 
 if __name__ == "__main__":
     main()
