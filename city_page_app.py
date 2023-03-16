@@ -68,12 +68,12 @@ def main():
 
     if st.button("Generate City Page"):
         try:
-            city_summary = wikipedia.summary(selected_city)
+            city_page = wikipedia.page(selected_city)
             city_page_url = wikipedia.page(selected_city).url
             st.write(f"Source: [{city_page_url}]({city_page_url})")
 
             # Chunk the city summary into 1000-token chunks with an overlap of 50 tokens
-            chunks = chunk_text(city_summary)
+            chunks = chunk_text(city_page)
 
             # Generate content for each chunk using OpenAI
             city_page_chunks = [generate_content(chunk) for chunk in chunks]
