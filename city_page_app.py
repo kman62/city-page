@@ -37,7 +37,7 @@ def generate_content(text):
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=f"Rewrite the following text in an engaging and unique way using active voice, including internal links and proper H1, H2, and H3 headers in markdown format. The text should appear as if written by a copywriter with 10 years of experience in SEO:\n\n{text}",
-        max_tokens=2900,
+        max_tokens=2500,
         n=1,
         stop=None,
         temperature=0.7,
